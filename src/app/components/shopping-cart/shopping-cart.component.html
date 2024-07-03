@@ -1,0 +1,43 @@
+<div class="pl-2">
+  <!-- Tabla de Carrito -->
+  <div class="carrito-table">
+    <h2>Carrito de Compras</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Género</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+          <th>Acciones</th> <!-- Nueva columna para acciones -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cart; let i = index">
+          <td><img [src]="'http://localhost:4000/' + item.imagePath" class="img-thumbnail" width="50"></td>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.gender}}</td>
+          <td>{{item.price}}</td>
+          <td>
+            <input type="number" class="form-control" [(ngModel)]="item.amount" (change)="actualizarCantidad(i, item.amount)" min="1">
+          </td>
+          <td>{{item.total}}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="eliminarItem(i)">Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="6" class="text-right"><strong>Total:</strong></td>
+          <td colspan="2">{{calcularTotal()}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center mt-3">
+      <button class="btn btn-success" (click)="pagar()">Pagar</button>
+    </div>
+  </div>
+</div>

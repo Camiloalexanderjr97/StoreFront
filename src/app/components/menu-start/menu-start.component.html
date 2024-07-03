@@ -1,0 +1,97 @@
+<div class="padding-top">
+  <nav class="navbar navbar-expand-lg" [ngStyle]="{'background-color': '#564e57'}">
+    <div class="container">
+      <a class="navbar-brand">{{type}}</a>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <button type="button" class="btn btn-light" (click)="mostrarList('Shoes')">
+            <span>Shoes</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-light" (click)="mostrarList('Shirt')">
+            <span>Shirt</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-light" (click)="mostrarList('Jeans')">
+            <span>Jeans</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-light" (click)="mostrarAllProducts()">
+            <span>My Photos</span>
+          </button>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <button type="button" class="btn btn-light" routerLink="/login">
+            <span>Login</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="pl-2">
+    <div class="select" *ngIf="mostrarListado">
+      <div class="photo-grid">
+        <div class="photo-card" *ngFor="let photo of photos">
+          <div class="card card-photo" (click)="openModal(photo)">
+            <div class="card-header">
+              {{photo.name}}
+            </div>
+            <img [src]="'http://localhost:4000/' + photo.imagePath" class="img-card-top">
+            <div class="card-body">
+              <p>{{photo.description}}</p>
+            </div>
+            <div class="card-body">
+              <p>Gender: {{photo.gender}}</p>
+            </div>
+            <div class="card-body">
+              <p type="number">Price: $ {{photo.price}}</p>
+            </div>
+            <div class="card-body">
+              <p type="number">Amount in Store: {{photo.amount}}</p>
+            </div>
+            <div class="card-body">
+              <p>{{photo.stock}}</p>
+            </div>
+            <div class="card-body">
+              <button class="btn btn-primary btn-block" (click)="comprar(photo, $event)">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="photoModalLabel">{{selectedPhoto?.name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img [src]="'http://localhost:4000/' + selectedPhoto?.imagePath" class="img-fluid">
+          <div class="mt-2">
+            <p>{{selectedPhoto?.description}}</p>
+            <p>Gender: {{selectedPhoto?.gender}}</p>
+            <p>Price: $ {{selectedPhoto?.price}}</p>
+            <p>Amount in Store: {{selectedPhoto?.amount}}</p>
+            <p>{{selectedPhoto?.stock}}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="comprar(selectedPhoto)">Comprar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

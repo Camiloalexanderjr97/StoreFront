@@ -1,0 +1,14 @@
+.carrito-table {
+  margin-top: 20px;
+}
+
+.carrito-table table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.carrito-table .img-thumbnail {
+  display: block;
+  margin: auto;
+}
+

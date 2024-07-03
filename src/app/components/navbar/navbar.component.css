@@ -1,0 +1,20 @@
+.close{
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1;
+    color: white;
+    text-shadow: 0 1px 0 #ffffff;
+    /* opacity: 0.5; */
+}
+
+.navbar-brand{
+    color: white;
+    font-size: 1.5rem;
+
+
+}
+
+.container-fluid{
+    background-color: black;
+}

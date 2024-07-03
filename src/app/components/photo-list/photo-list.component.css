@@ -1,0 +1,61 @@
+.card-photo {
+    cursor: pointer;
+}
+.navbar .bg-primary{
+    background-color: #564e57;
+}
+
+.card-photo:hover {
+    border: 1px solid #333;
+}
+
+.padding-top{
+    padding-top: 4rem;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas */
+    gap: 16px; /* Espacio entre las tarjetas */
+}
+
+.photo-card {
+    width: 100%;
+}
+
+.card-photo {
+    height: 80%; /* Altura fija para las tarjetas */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header, .card-body {
+    padding: 8px;
+}
+
+.img-card-top {
+    height: 150px; /* Altura fija para las imágenes */
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho de la tarjeta */
+    object-fit: cover; /* Mantiene la proporción de la imagen */
+}
+
+.search-input {
+    font-size: 1.2rem; /* Tamaño de fuente más grande */
+    padding: 10px; /* Más espacio dentro del input */
+    border: 2px solid #007bff; /* Borde más grueso con color primario */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para resaltar el input */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: all 0.3s ease; /* Transición suave para el hover */
+}
+
+.search-input:focus {
+    outline: none; /* Quitar el borde por defecto del navegador */
+    border-color: #0056b3; /* Cambiar el color del borde cuando está enfocado */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Aumentar la sombra cuando está enfocado */
+}
+
+.search-input::placeholder {
+    color: #6c757d; /* Color del placeholder */
+    font-weight: bold; /* Hacer el placeholder más visible */
+}
+

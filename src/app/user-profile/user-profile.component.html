@@ -1,0 +1,169 @@
+<div *ngIf="isLogged">
+  <div class="main-content">
+    <div class="container-fluid">
+      
+      <!-- Create User Button -->
+      <div class="row mt-3">
+        <div class="col-md-12 text-right">
+          <button class="btn btn-primary" (click)="showCreateForm()">Create User</button>
+        </div>
+      </div>
+
+      <!-- Create User Form -->
+      <div class="row mt-3" *ngIf="showCreate">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">Create Account</h4>
+            </div>
+            <div class="card-body">
+              <form (submit)="register()">
+                <div class="row">
+                  <div class="col">
+                    <mat-form-field class="example-full-width">
+                      <input [(ngModel)]="user.name" matInput placeholder="Full Name" type="text" name="name" required>
+                    </mat-form-field>
+                  </div>
+                  <div class="col">
+                    <mat-form-field class="example-full-width">
+                      <input [(ngModel)]="user.mail" matInput placeholder="Email" type="email" name="email" required>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input [(ngModel)]="user.username" matInput placeholder="Username" name="username" required>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input [(ngModel)]="user.password" matInput placeholder="Password" type="password" name="password" required>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row col">
+                  <div class="col-sm-2">
+                    <h3>Role</h3>
+                  </div>
+                  <div class="col">
+                    <mat-form-field appearance="fill" placeholder="Role">
+                      <mat-select required [(ngModel)]="user.rol" name="rol">
+                        <mat-option value="Admin">Admin</mat-option>
+                        <mat-option value="User">User</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <button mat-raised-button type="submit" class="btn btn-danger pull-right">Create Account</button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="row justify-content-center mt-3">
+        <div class="col-md-6 col-sm-8">
+          <mat-form-field>
+            <mat-label>Search User</mat-label>
+            <input matInput [(ngModel)]="searchText" (input)="filterUsers()" placeholder="Search by Name, Username, or Email">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- User List -->
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">User List</h4>
+            </div>
+            <div class="card-body">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of filteredUsers">
+                    <td>{{user.name}}</td>
+                    <td>{{user.mail}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.rol === 'Admin' ? 'Admin' : 'User'}}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm" (click)="editUser(user)">Edit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update User -->
+      <div *ngIf="showUpdate">
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header card-header-info">
+                <h4 class="card-title">Update User</h4>
+              </div>
+              <div class="card-body">
+                <form (submit)="updateUser()">
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field class="example-full-width">
+                        <input [(ngModel)]="selectedUser.name" matInput placeholder="Full Name" name="name" required>
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field class="example-full-width">
+                        <input [(ngModel)]="selectedUser.mail" matInput placeholder="Email" name="email" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input [(ngModel)]="selectedUser.username" matInput placeholder="Username" name="username" required>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input [(ngModel)]="selectedUser.password" matInput placeholder="Password" type="password" name="password" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row col">
+                    <div class="col-sm-2">
+                      <h3>Role</h3>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" placeholder="Role">
+                        <mat-select required [(ngModel)]="selectedUser.rol" name="rol">
+                          <mat-option value="Admin">Admin</mat-option>
+                          <mat-option value="User">User</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button type="submit" class="btn btn-info pull-right">Update User</button>
+                  <div class="clearfix"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

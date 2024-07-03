@@ -1,0 +1,54 @@
+.card-photo {
+    cursor: pointer;
+}
+.navbar .bg-primary{
+    background-color: #564e57;
+}
+
+.card-photo:hover {
+    border: 1px solid #333;
+}
+
+.padding-top{
+    padding-top: 4rem;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas */
+    gap: 16px; /* Espacio entre las tarjetas */
+}
+
+.photo-card {
+    width: 100%;
+}
+
+.card-photo {
+    height: 80%; /* Altura fija para las tarjetas */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header, .card-body {
+    padding: 8px;
+}
+
+.img-card-top {
+    height: 150px; /* Altura fija para las imágenes */
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho de la tarjeta */
+    object-fit: cover; /* Mantiene la proporción de la imagen */
+}
+/* Estilos personalizados para el componente */
+.photo-card {
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .photo-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .modal-lg {
+    max-width: 80%;
+  }
+  

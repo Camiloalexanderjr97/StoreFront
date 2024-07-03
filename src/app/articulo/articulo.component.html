@@ -1,0 +1,709 @@
+<!-- <app-sidebar></app-sidebar> -->
+<div *ngIf="isLogged">
+  <div class="main-content" *ngIf="mostrarListado">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger row">
+              <div col-6>
+                <h4 class="card-title"><b>articulos registrados</b></h4>
+                <p class="card-category">articulos registrados exitosamente.</p>
+              </div>
+              <div class="col-5"></div>
+
+              <div class="col-3">
+                <div class="float-right">
+                  <form class="text-center mt-2" autocomplete="off" name="formBuscarReHo" id="formBuscarReHo">
+                    <div class="float-left">
+                      <div class="input-group form-control-lg p-0">
+                        <div class="form-group m-0" id="accionBuscarDownHandlerReHo"></div>
+                      </div>
+                    </div>
+                    <div class="float-right">
+                      <div id="accionBuscarReHo" class="d-inline-block">
+                        <button mat-mini-fab color="warn" type="button" (click)="mostrarList()"
+                          aria-placeholder="Listar">
+                          <mat-icon>menu</mat-icon>
+                        </button>
+                      </div>
+                      <div id="accionBuscarReHo" class="d-inline-block" *ngIf="soloAdmin">
+                        <button mat-mini-fab color="warn" type="button" (click)="mostrarAgg()"
+                          aria-placeholder="Agregar">
+                          <mat-icon>plus_one</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-2 pt-2">
+                <mat-card-actions class="child">
+                  <button class="button" type="button" mat-raised-button color="primary" (click)="estadisticas()">Estadisticas
+  
+                    <span class="material-icons">sort</span>
+  
+                  </button>
+                </mat-card-actions>
+              </div>
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Buscar</mat-label>
+                  <input matInput (keyup)="filtrar($event)" placeholder="buscar" />
+                </mat-form-field>
+              </div>
+
+              <div class="col" style="width: fit-content; float: right;">
+                <form [formGroup]="filtroProducto" (ngSubmit)="filtrarPro()" class="demo-button">
+
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate formControlName="StartDate" placeholder="Start date">
+                          <input matEndDate formControlName="EndDate" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+
+                        <mat-error *ngIf="filtroProducto.controls.StartDate.hasError('matStartDateInvalid')">Invalid
+                          start
+                          date</mat-error>
+                        <mat-error *ngIf="filtroProducto.controls.EndDate.hasError('matEndDateInvalid')">Invalid end
+                          date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col">
+
+                      <mat-card-actions class="child">
+                        <button class="button" type="submit" mat-raised-button color="primary">Filtrar</button>
+                      </mat-card-actions>
+                      <br>
+                      <br>
+                      <mat-card-actions class="child">
+                        <button class="button" type="button" mat-raised-button color="primary"
+                          (click)="vaciarFiltro()">Clean</button>
+
+                      </mat-card-actions>
+                    </div>
+
+                  </div>
+
+
+                </form>
+              </div>
+            </div>
+          
+            <table class="table" mat-table [dataSource]="dataSource" matSort
+              (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+              <!-- id id_articulo -->
+              <ng-container matColumnDef="id_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id_articulo">
+                  id
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.id_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- nombre_revista -->
+              <ng-container matColumnDef="nombre_revista">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre_revista">
+                  Nombre Revista
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.nombre_revista }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre titulo_articulo -->
+
+              <ng-container matColumnDef="titulo_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by titulo_articulo">
+                  Titulo Articulo
+                </th>
+                <td class="td" *matCellDef="let articulos">
+                  {{ articulos.titulo_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre autores_articulo -->
+
+              <ng-container matColumnDef="autores_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by autores_articulo">
+                  Autor
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.autores_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre anio_articulo -->
+
+              <ng-container matColumnDef="fecha_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fecha_articulo">
+                  Fecha
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.fecha_articulo | date: 'dd/MM/yyyy'}} 
+                </td>
+              </ng-container>
+
+              <!-- Nombre mes_articulo -->
+
+         
+
+              <!-- Nombre volumen_articulo -->
+
+              <ng-container matColumnDef="volumen_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by volumen_articulo">
+                  Volumen
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.volumen_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre pagina_inical -->
+
+              <ng-container matColumnDef="pagina_inical">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pagina_inical">
+                  Pag. Inicial
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.pagina_inical }}
+                </td>
+              </ng-container>
+              <!-- Nombre pagina_final -->
+
+              <ng-container matColumnDef="pagina_final">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pagina_final">
+                  Pag. Final
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.pagina_final }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre issn_articulo -->
+
+              <ng-container matColumnDef="issn_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by issn_articulo">
+                  ISSN
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.issn_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre doi_articulo -->
+
+              <ng-container matColumnDef="doi_articulo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by doi_articulo">
+                  DOI
+                </th>
+                <td mat-cell *matCellDef="let articulos">
+                  {{ articulos.doi_articulo }}
+                </td>
+              </ng-container>
+
+              <!-- Nombre url_articulo -->
+              <ng-container matColumnDef="url_articulo">
+                <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header
+                  sortActionDescription="Sort by url_articulo">
+                  URL
+                </th>
+
+                <td mat-cell *matCellDef="let articulos" class="row">
+                  <div class="col-10">
+                    <a href="  {{ articulos.url_articulo }} ">
+                      {{ articulos.url_articulo }}
+                    </a>
+                  </div>
+
+                  <div class="col" *ngIf="soloAdmin">
+                    <button mat-flat-button color="primary" (click)="enviarID(articulos.id_articulo)"
+                      aria-label="Example icon button with a delete icon">
+                      <span class="material-icons">mode_edit</span>
+                    </button>
+
+                    <button mat-flat-button color="warn" (click)="EliminarArticulo(articulos.id_articulo)"
+                      aria-label="Example icon button with a delete icon">
+                      <span class="material-icons">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <button mat-raised-button  (click)="exportAsXLSX()" color="primary"> Export
+              <mat-icon>trending_down</mat-icon>
+            </button>
+            &nbsp;
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  <!-- Formulario Agregar -->
+
+  <div class="agregar" *ngIf="mostrarAgregar">
+    <div class="agregar">
+      <div class="main-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-danger row">
+                  <div class="col-4">
+                    <h4 class="card-title">Create Article</h4>
+                    <p class="card-category">Complete your params</p>
+                  </div>
+                  <div class="col-5"></div>
+                  <div class="col-3">
+                    <div class="float-right">
+                      <form class="text-center mt-2" autocomplete="off" name="formBuscarReHo" id="formBuscarReHo">
+                        <div class="float-left">
+                          <div class="input-group form-control-lg p-0">
+                            <div class="form-group m-0" id="accionBuscarDownHandlerReHo"></div>
+                          </div>
+                        </div>
+                        <div class="float-right">
+                          <div id="accionBuscarReHo" class="d-inline-block">
+                            <button mat-mini-fab color="warn" type="button" (click)="mostrarList()"
+                              aria-placeholder="Listar">
+                              <mat-icon>menu</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="mostrarAgregarIndividual">
+                  <div class="card-body">
+                    <form (submit)="crearArticulo()">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.id_articulo" matInput placeholder="Codigo" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.nombre_revista" matInput placeholder="Nombre Revista" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.titulo_articulo" matInput placeholder="Titulo"
+                              type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.autores_articulo" matInput placeholder="Autor" type="text" />
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.fecha_articulo" matInput
+                              placeholder="Fecha Publicacion" type="date" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.volumen_articulo" matInput
+                              placeholder="Volumen" type="text" />
+                          </mat-form-field>
+                        </div>
+                     
+                      </div>
+
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.pagina_inical" matInput
+                              placeholder="Pagina Inicial" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.pagina_final" matInput placeholder="Pagina Final"
+                              type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.issn_articulo" matInput placeholder="ISSN" type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.doi_articulo" matInput
+                              placeholder="DOI" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="articulos.url_articulo" matInput
+                              placeholder="URL" type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    
+
+                      <div class="col clearfix">
+                        <button mat-raised-button type="submit" class="btn btn-danger pull-right">
+                          Create Article
+                        </button>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col clearfix">
+                          <button (click)="mostrarMas()" class="btn btn-danger pull-right">
+                            Cambiar A Masivo
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="clearfix"></div>
+                    </form>
+                  </div>
+                </div>
+
+
+
+                <!-- Modal -->
+                <div *ngIf="mostrarAgregarMasivo" class="row">
+
+                  <div class="col-2">
+                    <div>  
+                      <a href="../../assets/Files/PlantillaAddMasivaArticulo (1).xlsx" class="link-success pl-2 pt-2">
+                        <div>
+                          <img src="../../assets/Files/excel.png" width="40%" class="rounded mx-auto d-block" alt="">
+
+                        </div>
+                        <div>
+                          <span class="badge badge-success"> Descargar Plantilla
+                          </span>
+
+                        </div>
+                      </a>
+                    </div>
+                    <div class="clearfix">
+                      <button (click)="mostrarIndi()" class="btn btn-danger ">
+                        Cambiar A Individal
+                      </button>
+                    </div>
+
+
+                  </div>
+                  <div class="col-10">
+                    <form id="file-upload-form" class="uploader">
+                      <div class="form-group files">
+
+                        <input id="file-upload" type="file" (change)="onFileChange($event)" name="fileUpload"
+                          accept=".xls,.xlsx" />
+                      </div>
+
+                      <label for="file-upload" id="file-drag">
+                        <img id="file-image" src="#" alt="Preview" class="hidden">
+                        <div id="start">
+                          <i class="fa fa-download" aria-hidden="true"></i>
+                          <div>Select a file or drag here</div>
+                          <div id="notimage" class="hidden">Please select an Document </div>
+                          <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
+                        </div>
+                        <div id="response" class="hidden">
+                          <div id="messages"></div>
+                          <progress class="progress" id="file-progress" value="0">
+                            <span>0</span>%
+                          </progress>
+                        </div>
+                      </label>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Formulario Editar -->
+
+    <div class="agregar" *ngIf="mostrarEditar">
+      <div class="agregar">
+        <div class="main-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-danger row">
+                    <div class="col-4">
+                      <h4 class="card-title">Editar Articulo</h4>
+                      <p class="card-category">Complete your params</p>
+                    </div>
+                    <div class="col-5"></div>
+                    <div class="col-3">
+                      <div class="float-right">
+                        <form class="text-center mt-2" autocomplete="off" name="formBuscarReHo" id="formBuscarReHo">
+                          <div class="float-left">
+                            <div class="input-group form-control-lg p-0">
+                              <div class="form-group m-0" id="accionBuscarDownHandlerReHo"></div>
+                            </div>
+                          </div>
+                          <div class="float-right">
+                            <div id="accionBuscarReHo" class="d-inline-block">
+                              <button mat-mini-fab color="warn" type="button" (click)="mostrarList()"
+                                aria-placeholder="Listar">
+  
+  
+                                <mat-icon>menu</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <form (submit)="crearArticulo()">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.id_articulo" matInput placeholder="Codigo" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.nombre_revista" matInput placeholder="Nombre Revista" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.titulo_articulo" matInput placeholder="Titulo"
+                              type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.autores_articulo" matInput placeholder="Autor" type="text" />
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.fecha_articulo | date: 'yyyy-MM-dd'" matInput
+                              placeholder="Fecha Publicacion" type="date" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.volumen_articulo" matInput
+                              placeholder="Volumen" type="text" />
+                          </mat-form-field>
+                        </div>
+                     
+                      </div>
+
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.pagina_inical" matInput
+                              placeholder="Pagina Inicial" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.pagina_final" matInput placeholder="Pagina Final"
+                              type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.issn_articulo" matInput placeholder="ISSN" type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.doi_articulo" matInput
+                              placeholder="DOI" type="text" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col">
+                          <mat-form-field class="example-full-width">
+                            <input [value]="articulos.url_articulo" matInput
+                              placeholder="URL" type="text" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    
+
+                      <div class="col clearfix">
+                        <button mat-raised-button type="submit" class="btn btn-danger pull-right">
+                          Guardar información
+                        </button>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col clearfix">
+                          <button (click)="mostrarMas()" class="btn btn-danger pull-right">
+                            Cambiar A Masivo
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="clearfix"></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal Estadisticas -->
+
+  <div class="agregar" *ngIf="mostrarEstadistica">
+    <div class="agregar">
+      <div class="main-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-danger row">
+                  <div class="col-4">
+                    <h4 class="card-title">Generate stadistics</h4>
+                    <p class="card-category">Complete your Filter</p>
+                  </div>
+                  <div class="col-5"></div>
+                  <div class="col-3">
+                    <div class="float-right">
+                      <form class="text-center mt-2" autocomplete="off" name="formBuscarReHo" id="formBuscarReHo">
+                        <div class="float-left">
+                          <div class="input-group form-control-lg p-0">
+                            <div class="form-group m-0" id="accionBuscarDownHandlerReHo"></div>
+                          </div>
+                        </div>
+                        <div class="float-right">
+                          <div id="accionBuscarReHo" class="d-inline-block">
+                            <button mat-mini-fab color="warn" type="button" (click)="mostrarList()"
+                              aria-placeholder="Listar">
+                              <mat-icon>menu</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div >
+
+                  <div class="card-body">
+                   
+                    <form  (ngSubmit)="filtrarEstadistica()" class="demo-button">
+
+                      <div class="row">
+                        <div class="input-group mb-3 col-2">
+                          
+                          <mat-form-field class="example-full-width">
+                            <input [(ngModel)]="fecha" matInput placeholder="Año" type="text" />
+                          </mat-form-field>
+
+                        </div>
+                      <div class="col-sm-1">
+
+                      </div>
+
+                      
+
+                        <div class="col pt-2">
+                          
+                          <mat-card-actions class="child">
+                            <button class="button" type="submit" mat-raised-button color="primary">Filtrar</button>
+                          </mat-card-actions>
+                         
+                        </div>
+
+                      </div>
+      
+      
+                  
+             
+                  
+                    </form>
+
+                    <div id="estadistica">
+
+                    <ngx-charts-bar-vertical
+                    [view]="view"
+                    [scheme]="colorScheme"
+                    [results]="nuevo"
+                    [gradient]="gradient"
+                    [xAxis]="showXAxis"
+                    [yAxis]="showYAxis"
+                    [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel"
+                    [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel"
+                    [showDataLabel]="showDataLabel"
+                    (select)="onSelect($event)">
+                    </ngx-charts-bar-vertical>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 pt-2">
+                  <mat-card-actions class="child">
+                    <button class="button" type="button" mat-raised-button color="primary" (click)="imprSelec()">Imprimir
+    
+                      <span class="material-icons">print</span>
+    
+                    </button>
+                  </mat-card-actions>
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

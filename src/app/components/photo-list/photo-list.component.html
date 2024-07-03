@@ -1,0 +1,339 @@
+<div class="padding-top" *ngIf="isAdmin" >
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand">{{type}}</a>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Shoes')">
+              <span>Shoes</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Shirt')">
+              <span>Shirt</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Jeans')">
+              <span>Jeans</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarAllProducts()">
+              <span>My Photos</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarLoadId()">
+              <span>New</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  
+    <div class="row justify-content-center mt-3">
+      <div class="col-md-6 col-sm-8">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput  [(ngModel)]="searchText" (input)="filterPhotos()" placeholder="Search by Name..." />
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="pl-2">
+      <div class="select" *ngIf="mostrarListado">
+        <div class="photo-grid">
+          <div class="photo-card" *ngFor="let photo of filteredPhotos">
+            <div class="card card-photo" (click)="selectedCard(photo._id)">
+              <div class="card-header">
+                {{photo.name}}
+              </div>
+              <img [src]="'http://localhost:4000/' + photo.imagePath" class="img-card-top">
+              <div class="card-body">
+                <p>{{photo.description}}</p>
+              </div> 
+              <div class="card-body">
+                <p>Gender: {{photo.gender}}</p>
+              </div>
+              <div class="card-body">
+                <p type="number">Price: $ {{photo.price}}</p>
+              </div>
+              <div class="card-body">
+                <p type="number">Amount in Store: {{photo.amount}}</p>
+              </div>
+              <div class="card-body">
+                <p>{{photo.stock}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="show" *ngIf="mostrarSelect">
+      <div class="row" *ngIf="!nPhoto; else main_content">
+        <h1>Loading...</h1>
+      </div>
+      <ng-template #main_content>
+        <div class="col-lg-4 mx-auto">
+          <div class="card">
+            <div class="card-header">
+              Update Information
+            </div>
+            <div class="card-body">
+              <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" novalidate>
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Name:" name="name" [(ngModel)]="nPhoto.name" required #nameModel="ngModel">
+                  <div *ngIf="nameModel.invalid && (nameModel.dirty || nameModel.touched)" class="text-danger">
+                    Name is required.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Description:" name="description" [(ngModel)]="nPhoto.description" required #descriptionModel="ngModel">
+                  <div *ngIf="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)" class="text-danger">
+                    Description is required.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <mat-form-field required>
+                    <mat-select placeholder="Category" [(ngModel)]="nPhoto.category" name="category" required #categoryModel="ngModel">
+                      <mat-option value="Shoes">Shoes</mat-option>
+                      <mat-option value="Shirt">Shirt</mat-option>
+                      <mat-option value="Jeans">Jean</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div *ngIf="categoryModel.invalid && (categoryModel.dirty || categoryModel.touched)" class="text-danger">
+                    Category is required.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <mat-form-field required>
+                    <mat-select placeholder="Gender" [(ngModel)]="nPhoto.gender" name="gender" required #genderModel="ngModel">
+                      <mat-option value="0">Male</mat-option>
+                      <mat-option value="1">Female</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div *ngIf="genderModel.invalid && (genderModel.dirty || genderModel.touched)" class="text-danger">
+                    Gender is required.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="number" class="form-control" placeholder="Amount:" name="amount" [(ngModel)]="nPhoto.amount" required #amountModel="ngModel" min="1">
+                  <div *ngIf="amountModel.invalid && (amountModel.dirty || amountModel.touched)" class="text-danger">
+                    Amount is required and must be a positive number.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="number" class="form-control" placeholder="Price:" name="price" [(ngModel)]="nPhoto.price" required #priceModel="ngModel" min="0.01" step="0.01">
+                  <div *ngIf="priceModel.invalid && (priceModel.dirty || priceModel.touched)" class="text-danger">
+                    Price is required and must be a positive number.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <mat-form-field required>
+                    <mat-select placeholder="Stock" [(ngModel)]="nPhoto.stock" name="stock" required #stockModel="ngModel">
+                      <mat-option [value]="0">Available</mat-option>
+                      <mat-option [value]="1">Unavailable</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div *ngIf="stockModel.invalid && (stockModel.dirty || stockModel.touched)" class="text-danger">
+                    Stock status is required.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="card">
+                    <img [src]="'http://localhost:4000/' + nPhoto.imagePath" class="img-fluid" *ngIf="nPhoto.imagePath">
+                    <div *ngIf="!nPhoto.imagePath" class="text-danger">
+                      Image is required.
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-block" [disabled]="photoForm.invalid || !nPhoto.imagePath">
+                  Update
+                </button>
+              </form>
+              <button class="btn btn-danger" (click)="deletePhoto(photo._id)">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  
+    <div class="load" *ngIf="mostrarUpload">
+      <div class="col-lg-4 mx-auto">
+        <div class="card">
+          <div class="card-header">
+            Load a new Product
+          </div>
+          <div class="card-body">
+            <form #photoForm="ngForm" (ngSubmit)="uploadPhoto()" novalidate>
+              <div class="form-group">
+                <input type="text" class="form-control" [(ngModel)]="name" name="name" placeholder="Photo's name" required #nameModel="ngModel">
+                <div *ngIf="nameModel.invalid && (nameModel.dirty || nameModel.touched)" class="text-danger">
+                  Name is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" [(ngModel)]="description" name="description" placeholder="Photo's Description" required #descriptionModel="ngModel">
+                <div *ngIf="descriptionModel.invalid && (descriptionModel.dirty || descriptionModel.touched)" class="text-danger">
+                  Description is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <mat-form-field required>
+                  <mat-select placeholder="Category" [(ngModel)]="category" name="category" required #categoryModel="ngModel">
+                    <mat-option value="Shoes">Shoes</mat-option>
+                    <mat-option value="Shirt">Shirt</mat-option>
+                    <mat-option value="Jeans">Jean</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div *ngIf="categoryModel.invalid && (categoryModel.dirty || categoryModel.touched)" class="text-danger">
+                  Category is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <mat-form-field required>
+                  <mat-select placeholder="Gender" [(ngModel)]="gender" name="gender" required #genderModel="ngModel">
+                    <mat-option value="0">Male</mat-option>
+                    <mat-option value="1">Female</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div *ngIf="genderModel.invalid && (genderModel.dirty || genderModel.touched)" class="text-danger">
+                  Gender is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="number" class="form-control" [(ngModel)]="amount" name="amount" placeholder="Amount in Stock" required #amountModel="ngModel" min="1">
+                <div *ngIf="amountModel.invalid && (amountModel.dirty || amountModel.touched)" class="text-danger">
+                  Amount is required and must be a positive number.
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="number" class="form-control" [(ngModel)]="price" name="price" placeholder="Price:" required #priceModel="ngModel" min="0.01" step="0.01">
+                <div *ngIf="priceModel.invalid && (priceModel.dirty || priceModel.touched)" class="text-danger">
+                  Price is required and must be a positive number.
+                </div>
+              </div>
+              <div class="form-group">
+                <mat-form-field required>
+                  <mat-select placeholder="Stock" [(ngModel)]="stock" name="stock" required #stockModel="ngModel">
+                    <mat-option [value]="0">Available</mat-option>
+                    <mat-option [value]="1">Unavailable</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div *ngIf="stockModel.invalid && (stockModel.dirty || stockModel.touched)" class="text-danger">
+                  Status is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="file" class="d-none" (change)="onPhotoSelected($event)" #photoInput required>
+                <img [src]="photoSelected || 'https://as1.ftcdn.net/v2/jpg/07/86/72/92/1000_F_786729257_BgeNt9SOnWA4pTXDFXim6y0Rxrs15FRk.jpg'" class="img-fluid" alt="No image" (click)="photoInput.click()">
+                <div *ngIf="!photoSelected" class="text-danger">
+                  Photo is required.
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block" [disabled]="photoForm.invalid || !photoSelected">
+                Upload
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<div class="padding-top" *ngIf="!isAdmin">
+    <nav class="navbar navbar-expand-lg" [ngStyle]="{'background-color': '#564e57'}">
+      <div class="container">
+        <a class="navbar-brand">{{type}}</a>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Shoes')">
+              <span>Shoes</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Shirt')">
+              <span>Shirt</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarList('Jeans')">
+              <span>Jeans</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light" (click)="mostrarAllProducts()">
+              <span>My Photos</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="pl-2">
+      <div class="select" *ngIf="mostrarListado">
+        <div class="photo-grid">
+          <div class="photo-card" *ngFor="let photo of photos">
+            <div class="card card-photo" (click)="openModal(photo)">
+              <div class="card-header">
+                {{photo.name}}
+              </div>
+              <img [src]="'http://localhost:4000/' + photo.imagePath" class="img-card-top">
+              <div class="card-body">
+                <p>{{photo.description}}</p>
+              </div>
+              <div class="card-body">
+                <p>Gender: {{photo.gender}}</p>
+              </div>
+              <div class="card-body">
+                <p type="number">Price: $ {{photo.price}}</p>
+              </div>
+              <div class="card-body">
+                <p type="number">Amount in Store: {{photo.amount}}</p>
+              </div>
+              <div class="card-body">
+                <p>{{photo.stock}}</p>
+              </div>
+              <div class="card-body">
+                <button class="btn btn-primary btn-block" (click)="comprar(photo, $event)">
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="photoModalLabel">{{selectedPhoto?.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img [src]="'http://localhost:4000/' + selectedPhoto?.imagePath" class="img-fluid">
+            <div class="mt-2">
+              <p>{{selectedPhoto?.description}}</p>
+              <p>Gender: {{selectedPhoto?.gender}}</p>
+              <p>Price: $ {{selectedPhoto?.price}}</p>
+              <p>Amount in Store: {{selectedPhoto?.amount}}</p>
+              <p>{{selectedPhoto?.stock}}</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="comprar(selectedPhoto)">Comprar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
